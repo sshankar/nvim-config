@@ -133,7 +133,11 @@ return require('packer').startup(function(use)
       config = [[require('config.gitsigns')]],
       event = 'User ActuallyEditing',
     },
-    { 'TimUntersberger/neogit', cmd = 'Neogit', config = [[require('config.neogit')]] },
+    { 
+      'TimUntersberger/neogit',
+      requires = 'sindrets/diffview.nvim',
+      cmd = 'Neogit', 
+      config = [[require('config.neogit')]] },
     {
       'akinsho/git-conflict.nvim',
       tag = '*',
@@ -146,7 +150,8 @@ return require('packer').startup(function(use)
   
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
-
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+  
   if packer_bootstrap then
     require('packer').sync()
   end
