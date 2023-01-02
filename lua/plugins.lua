@@ -143,6 +143,9 @@ return require('packer').startup(function(use)
       event = 'BufReadPost',
     },
   }
+  
+  use 'vim-airline/vim-airline'
+  use 'vim-airline/vim-airline-themes'
 
   if packer_bootstrap then
     require('packer').sync()
