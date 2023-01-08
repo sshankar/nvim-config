@@ -104,3 +104,5 @@ end, {})
 require('leap').add_default_mappings()
 
 vim.cmd [[colorscheme nord]]
+
+require 'config.keymaps'

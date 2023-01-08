@@ -151,7 +151,7 @@ return require('packer').startup(function(use)
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  
+  use { 'pedrohdz/vim-yaml-folds' }  
   if packer_bootstrap then
     require('packer').sync()
   end
