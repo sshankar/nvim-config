@@ -152,6 +152,74 @@ return require('packer').startup(function(use)
   use 'vim-airline/vim-airline-themes'
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
   use { 'pedrohdz/vim-yaml-folds' }  
+  use { 'fatih/vim-go' }
+
+  use {
+    'neovim/nvim-lspconfig',
+    config = function ()
+      require('lspconfig').rust_analyzer.setup {
+        settings = {
+          ['rust-analyzer'] = {
+            check = {
+              command = "clippy";
+            },
+            diagnostics = {
+              enable = true;
+            }
+          }
+        }
+      }
+    end
+  }
+
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'neovim/nvim-lspconfig',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-vsnip',
+      'hrsh7th/vim-vsnip',
+    },
+    config = function()
+      require('cmp').setup({
+        snippet = {
+          expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+          end,
+        },
+        sources =  {
+          { name = 'nvim_lsp' },
+          { name = 'vsnip' },
+          { name = 'path' },
+          { name = 'buffer' },
+        },
+      })
+    end
+  }
+
+  use 'preservim/tagbar'
+  use {
+    'simrat39/rust-tools.nvim',
+    config = function()
+      require("rust-tools").setup({
+        tools = {
+          runnables = {
+            use_telescope = true,
+          },
+          inlay_hints = {
+            auto = true,
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+          }
+        }
+      })
+    end
+  }
+
   if packer_bootstrap then
     require('packer').sync()
   end
