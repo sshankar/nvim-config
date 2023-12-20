@@ -169,6 +169,8 @@ return require('packer').startup(function(use)
           }
         }
       }
+
+      require('lspconfig').gopls.setup{}
     end
   }
 
@@ -217,6 +219,24 @@ return require('packer').startup(function(use)
           }
         }
       })
+    end
+  }
+
+  use { 
+    'projekt0n/github-nvim-theme', 
+    config = function()
+      require('github-theme').setup({
+        options = {
+          darken = {
+            float = true,
+            sidebars = {
+              enabled = true,
+            },
+          },
+        },
+      })
+
+      vim.cmd('colorscheme github_dark')
     end
   }
 

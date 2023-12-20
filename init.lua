@@ -76,6 +76,7 @@ opt.timeoutlen = 200
 opt.fillchars = [[vert:│,horiz:─,eob: ]]
 opt.termguicolors = true
 -- opt.background = 'light'
+opt.clipboard = unnamedplus
 
 -- Commands
 local create_cmd = vim.api.nvim_create_user_command
@@ -102,7 +103,5 @@ end, {})
 
 -- Plugin Setup
 require('leap').add_default_mappings()
-
-vim.cmd [[colorscheme nord]]
 
 require 'config.keymaps'
