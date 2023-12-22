@@ -46,11 +46,13 @@ return require('packer').startup(function(use)
   }
 
   -- Wrapping/delimiters
-  --use {
-    --{ 'machakann/vim-sandwich', event = 'User ActuallyEditing' },
-    -- { 'andymass/vim-matchup', setup = [[require('config.matchup')]], event = 'User ActuallyEditing' },
-  --}
-  
+  use {
+    'andymass/vim-matchup',
+    setup = function()
+      vim.g.matchup_matchparen_offscreen = { method = "popup" } 
+    end
+  }
+ 
   -- Search
   use 'romainl/vim-cool'
   use {
@@ -117,7 +119,7 @@ return require('packer').startup(function(use)
   use {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
-    config = [[vim.g.neo_tree_remove_legacy_commands = true]],
+    config = [[require('config.neotree')]],
     requires = {
       'nvim-lua/plenary.nvim',
       'kyazdani42/nvim-web-devicons', -- not strictly required, but recommended
