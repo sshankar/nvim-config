@@ -15,7 +15,7 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
   use 'rcarriga/nvim-notify'
-  
+
   -- motion
   use 'chaoren/vim-wordmotion'
   use {
@@ -25,7 +25,7 @@ return require('packer').startup(function(use)
     },
     { 'ggandor/flit.nvim', config = [[require'flit'.setup { labeled_modes = 'nv' }]] },
   }
-  
+
   -- Quickfix
   use { 'Olical/vim-enmasse', cmd = 'EnMasse' }
   use 'kevinhwang91/nvim-bqf'
@@ -49,10 +49,10 @@ return require('packer').startup(function(use)
   use {
     'andymass/vim-matchup',
     setup = function()
-      vim.g.matchup_matchparen_offscreen = { method = "popup" } 
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end
   }
- 
+
   -- Search
   use 'romainl/vim-cool'
   use {
@@ -91,7 +91,7 @@ return require('packer').startup(function(use)
 
   -- Highlights
   use {
-    'nvim-treesitter/nvim-treesitter', 
+    'nvim-treesitter/nvim-treesitter',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()
@@ -99,14 +99,14 @@ return require('packer').startup(function(use)
     event = 'User ActuallyEditing',
     config = [[require 'config.treesitter']],
   }
-  
+
   -- Indentation tracking
   --use { 'RRethy/nvim-treesitter-textsubjects', after = 'nvin-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter-refactor', after = 'nvim-treesitter' }
   use { 'lukas-reineke/indent-blankline.nvim', after = 'nvim-treesitter' }
-  
-  use 'arcticicestudio/nord-vim' 
-  
+
+  use 'arcticicestudio/nord-vim'
+
   use 'kyazdani42/nvim-web-devicons'
   use {
     'folke/trouble.nvim',
@@ -115,7 +115,7 @@ return require('packer').startup(function(use)
       require('trouble').setup {}
     end,
   }
-  
+
   use {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
@@ -126,7 +126,7 @@ return require('packer').startup(function(use)
       'MunifTanjim/nui.nvim',
     },
   }
-  
+
   -- Git
   use {
     {
@@ -135,10 +135,10 @@ return require('packer').startup(function(use)
       config = [[require('config.gitsigns')]],
       event = 'User ActuallyEditing',
     },
-    { 
+    {
       'TimUntersberger/neogit',
       requires = 'sindrets/diffview.nvim',
-      cmd = 'Neogit', 
+      cmd = 'Neogit',
       config = [[require('config.neogit')]] },
     {
       'akinsho/git-conflict.nvim',
@@ -149,11 +149,11 @@ return require('packer').startup(function(use)
       event = 'BufReadPost',
     },
   }
-  
+
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use { 'pedrohdz/vim-yaml-folds' }  
+  use { 'pedrohdz/vim-yaml-folds' }
   use { 'fatih/vim-go' }
 
   use {
@@ -224,8 +224,8 @@ return require('packer').startup(function(use)
     end
   }
 
-  use { 
-    'projekt0n/github-nvim-theme', 
+  use {
+    'projekt0n/github-nvim-theme',
     config = function()
       require('github-theme').setup({
         options = {
@@ -239,6 +239,17 @@ return require('packer').startup(function(use)
       })
 
       vim.cmd('colorscheme github_dark')
+    end
+  }
+
+  use {
+    'akinsho/bufferline.nvim',
+    tag = "*",
+    requires = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      vim.opt.termguicolors = true
+
+      require('bufferline').setup{}
     end
   }
 
