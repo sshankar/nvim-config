@@ -136,10 +136,14 @@ return require('packer').startup(function(use)
       event = 'User ActuallyEditing',
     },
     {
-      'TimUntersberger/neogit',
-      requires = 'sindrets/diffview.nvim',
-      cmd = 'Neogit',
-      config = [[require('config.neogit')]] },
+      'NeogitOrg/neogit',
+      requires = {
+        'nvim-lua/plenary.nvim',
+        'sindrets/diffview.nvim',
+        'nvim-telescope/telescope.nvim',
+      },
+      config = [[require('config.neogit')]], 
+    },
     {
       'akinsho/git-conflict.nvim',
       tag = '*',
