@@ -1,4 +1,5 @@
 require("neo-tree").setup({
+  enable_git_status = true,
   filesystem = {
     follow_current_file = {
       enabled = true,

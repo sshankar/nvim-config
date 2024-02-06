@@ -40,7 +40,7 @@ opt.wildignore = { '*.o', '*~', '*.pyc' }
 opt.wildmode = 'longest,full'
 opt.whichwrap:append '<,>,h,l'
 opt.inccommand = 'nosplit'
-opt.lazyredraw = true
+opt.lazyredraw = false
 opt.showmatch = true
 opt.ignorecase = true
 opt.smartcase = true
@@ -76,7 +76,7 @@ opt.timeoutlen = 200
 opt.fillchars = [[vert:│,horiz:─,eob: ]]
 opt.termguicolors = true
 -- opt.background = 'light'
-opt.clipboard = unnamedplus
+opt.clipboard = unnamed
 
 -- Commands
 local create_cmd = vim.api.nvim_create_user_command
