@@ -14,7 +14,7 @@ local packer_bootstrap = ensure_packer()
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
-  
+
   use 'rcarriga/nvim-notify'
   use {
     'folke/noice.nvim',
@@ -152,7 +152,7 @@ return require('packer').startup(function(use)
         'sindrets/diffview.nvim',
         'nvim-telescope/telescope.nvim',
       },
-      config = [[require('config.neogit')]], 
+      config = [[require('config.neogit')]],
     },
     {
       'akinsho/git-conflict.nvim',
@@ -169,7 +169,28 @@ return require('packer').startup(function(use)
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
   use { 'pedrohdz/vim-yaml-folds' }
   use { 'fatih/vim-go' }
-
+  use {
+   'leoluz/nvim-dap-go',
+   requires = {
+      'rcarriga/nvim-dap-ui',
+      'mfussenegger/nvim-dap',
+   },
+   config = function()
+     require('dap-go').setup({
+      dap_configurations = {
+        {
+          type = "go",
+          name = "Attach Remote",
+          mode = "remote",
+          request = "attach",
+        },
+      },
+      delve = {
+        build_flags = "-tags=integration",
+      },
+    })
+   end,
+  }
   use {
     'neovim/nvim-lspconfig',
     config = function ()
@@ -252,7 +273,7 @@ return require('packer').startup(function(use)
         },
       })
 
-      vim.cmd('colorscheme github_dark')
+      vim.cmd('colorscheme github_dark_dimmed')
     end
   }
 
