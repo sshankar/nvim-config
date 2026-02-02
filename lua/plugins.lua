@@ -267,13 +267,13 @@ return require('packer').startup(function(use)
           darken = {
             float = true,
             sidebars = {
-              enabled = true,
+              enable = true,
             },
           },
         },
       })
 
-      vim.cmd('colorscheme github_dark_dimmed')
+      vim.cmd('colorscheme github_dark')
     end
   }
 
@@ -285,6 +285,25 @@ return require('packer').startup(function(use)
       vim.opt.termguicolors = true
 
       require('bufferline').setup{}
+    end
+  }
+
+  use { 
+    'folke/which-key.nvim', 
+    requires = {
+      'echasnovski/mini.icons',
+    },
+  }
+
+  use {
+    'pwntester/octo.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function ()
+      require"octo".setup()
     end
   }
 
