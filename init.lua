@@ -1,12 +1,8 @@
-require 'impatient'
-vim.notify = require 'notify'
-
 local g = vim.g
-local cmd = vim.cmd
 
--- Leader/local leader
-g.mapleader = [[ ]]
-g.maplocalleader = [[,]]
+-- Leader/local leader (must be set before lazy.nvim)
+g.mapleader = ' '
+g.maplocalleader = ','
 
 -- Skip some remote provider loading
 g.loaded_python3_provider = 0
@@ -28,7 +24,7 @@ local disabled_built_ins = {
   'netrwPlugin',
 }
 
-for i = 1, 10 do
+for i = 1, #disabled_built_ins do
   g['loaded_' .. disabled_built_ins[i]] = 1
 end
 
@@ -76,32 +72,24 @@ opt.timeoutlen = 200
 opt.fillchars = [[vert:│,horiz:─,eob: ]]
 opt.termguicolors = true
 -- opt.background = 'light'
-opt.clipboard = unnamed
+opt.clipboard = 'unnamed'
 
--- Commands
-local create_cmd = vim.api.nvim_create_user_command
-create_cmd('PackerInstall', function()
-  cmd [[packadd packer.nvim]]
-  require('plugins').install()
-end, {})
-create_cmd('PackerUpdate', function()
-  cmd [[packadd packer.nvim]]
-  require('plugins').update()
-end, {})
-create_cmd('PackerSync', function()
-  cmd [[packadd packer.nvim]]
-  require('plugins').sync()
-end, {})
-create_cmd('PackerClean', function()
-  cmd [[packadd packer.nvim]]
-  require('plugins').clean()
-end, {})
-create_cmd('PackerCompile', function()
-  cmd [[packadd packer.nvim]]
-  require('plugins').compile()
-end, {})
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Plugin Setup
-require('leap').add_default_mappings()
+-- Load plugins
+require('lazy').setup('plugins')
 
+-- Keymaps
 require 'config.keymaps'

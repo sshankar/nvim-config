@@ -1,219 +1,219 @@
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
-end
+return {
+  -- Notifications
+  { 'rcarriga/nvim-notify' },
 
-local packer_bootstrap = ensure_packer()
+  -- Fuzzy finder
+  {
+    'ibhagwan/fzf-lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+  },
 
-return require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
-  use 'lewis6991/impatient.nvim'
-
-  use 'rcarriga/nvim-notify'
-  use {
+  -- Noice (UI for messages, cmdline, popupmenu)
+  {
     'folke/noice.nvim',
-    requires = {
+    event = 'VeryLazy',
+    dependencies = {
       'MunifTanjim/nui.nvim',
       'rcarriga/nvim-notify',
     },
     config = function()
       require('noice').setup()
-    end
-  }
-  -- motion
-  use 'chaoren/vim-wordmotion'
-  use {
-    {
-      'ggandor/leap.nvim',
-      requires = 'tpope/vim-repeat',
-    },
-    { 'ggandor/flit.nvim', config = [[require'flit'.setup { labeled_modes = 'nv' }]] },
-  }
+    end,
+  },
+
+  -- Motion
+  { 'chaoren/vim-wordmotion' },
+  {
+    'https://codeberg.org/andyg/leap.nvim',
+    dependencies = { 'tpope/vim-repeat' },
+    config = function()
+      require('leap').add_default_mappings()
+    end,
+  },
+  {
+    'ggandor/flit.nvim',
+    config = function()
+      require('flit').setup { labeled_modes = 'nv' }
+    end,
+  },
 
   -- Quickfix
-  use { 'Olical/vim-enmasse', cmd = 'EnMasse' }
-  use 'kevinhwang91/nvim-bqf'
-  use {
+  { 'Olical/vim-enmasse', cmd = 'EnMasse' },
+  { 'kevinhwang91/nvim-bqf' },
+  {
     'https://gitlab.com/yorickpeterse/nvim-pqf',
     config = function()
       require('pqf').setup()
     end,
-  }
+  },
 
   -- Commenting
-  use {
+  {
     'numToStr/Comment.nvim',
     event = 'User ActuallyEditing',
     config = function()
       require('Comment').setup {}
     end,
-  }
+  },
 
   -- Wrapping/delimiters
-  use {
+  {
     'andymass/vim-matchup',
-    setup = function()
-      vim.g.matchup_matchparen_offscreen = { method = "popup" }
-    end
-  }
+    init = function()
+      vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+    end,
+  },
 
   -- Search
-  use 'romainl/vim-cool'
-  use {
-    {
-      'nvim-telescope/telescope.nvim',
-      requires = {
-        'nvim-lua/popup.nvim',
-        'nvim-lua/plenary.nvim',
-        'telescope-frecency.nvim',
-        'telescope-fzf-native.nvim',
-        'nvim-telescope/telescope-ui-select.nvim',
+  { 'romainl/vim-cool' },
+
+  -- Telescope
+  {
+    'nvim-telescope/telescope.nvim',
+    cmd = 'Telescope',
+    dependencies = {
+      'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-ui-select.nvim',
+      'crispgm/telescope-heading.nvim',
+      'nvim-telescope/telescope-file-browser.nvim',
+      {
+        'nvim-telescope/telescope-frecency.nvim',
+        dependencies = { 'kkharji/sqlite.lua' },
       },
-      wants = {
-        'popup.nvim',
-        'plenary.nvim',
-        'telescope-frecency.nvim',
-        'telescope-fzf-native.nvim',
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make',
       },
-      setup = [[require('config.telescope_setup')]],
-      config = [[require('config.telescope')]],
-      cmd = 'Telescope',
-      module = 'telescope',
     },
-    {
-      'nvim-telescope/telescope-frecency.nvim',
-      after = 'telescope.nvim',
-      requires = 'tami5/sqlite.lua',
+    keys = {
+      { '<c-p>', function() require('telescope.builtin').buffers() end, desc = 'Buffers' },
+      { '<c-o>', function() require('telescope.builtin').oldfiles() end, desc = 'Old files' },
+      { '<c-e>', function() require('telescope.builtin').find_files() end, desc = 'Find files' },
+      { '<c-s>', function() require('telescope.builtin').git_files() end, desc = 'Git files' },
+      { '<c-d>', function() require('telescope.builtin').grep_string() end, desc = 'Grep string' },
+      { '<c-g>', function() require('telescope.builtin').live_grep() end, desc = 'Live grep' },
     },
-    {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      run = 'make',
-    },
-    'crispgm/telescope-heading.nvim',
-    'nvim-telescope/telescope-file-browser.nvim',
-  }
+    config = [[require('config.telescope')]],
+  },
 
   -- Highlights
-  use {
+  {
     'nvim-treesitter/nvim-treesitter',
-    run = function()
-      local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-      ts_update()
-    end,
-    event = 'User ActuallyEditing',
+    build = ':TSUpdate',
+    event = { 'BufReadPost', 'BufNewFile' },
     config = [[require 'config.treesitter']],
-  }
+  },
 
   -- Indentation tracking
-  --use { 'RRethy/nvim-treesitter-textsubjects', after = 'nvin-treesitter' }
-  use { 'nvim-treesitter/nvim-treesitter-refactor', after = 'nvim-treesitter' }
-  use { 'lukas-reineke/indent-blankline.nvim', after = 'nvim-treesitter' }
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    event = { 'BufReadPost', 'BufNewFile' },
+  },
 
-  use 'arcticicestudio/nord-vim'
+  -- Colorscheme
+  { 'arcticicestudio/nord-vim' },
 
-  use 'kyazdani42/nvim-web-devicons'
-  use {
+  -- Icons
+  { 'kyazdani42/nvim-web-devicons' },
+
+  -- Trouble (diagnostics)
+  {
     'folke/trouble.nvim',
     cmd = 'Trouble',
     config = function()
       require('trouble').setup {}
     end,
-  }
+  },
 
-  use {
+  -- File explorer
+  {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
-    config = [[require('config.neotree')]],
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
-      'kyazdani42/nvim-web-devicons', -- not strictly required, but recommended
+      'kyazdani42/nvim-web-devicons',
       'MunifTanjim/nui.nvim',
     },
-  }
+    config = [[require('config.neotree')]],
+  },
 
   -- Git
-  use {
-    {
-      'lewis6991/gitsigns.nvim',
-      requires = 'nvim-lua/plenary.nvim',
-      config = [[require('config.gitsigns')]],
-      event = 'User ActuallyEditing',
+  {
+    'lewis6991/gitsigns.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    event = 'User ActuallyEditing',
+    config = [[require('config.gitsigns')]],
+  },
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim',
     },
-    {
-      'NeogitOrg/neogit',
-      requires = {
-        'nvim-lua/plenary.nvim',
-        'sindrets/diffview.nvim',
-        'nvim-telescope/telescope.nvim',
-      },
-      config = [[require('config.neogit')]],
-    },
-    {
-      'akinsho/git-conflict.nvim',
-      tag = '*',
-      config = function()
-        require('git-conflict').setup()
-      end,
-      event = 'BufReadPost',
-    },
-  }
+    config = [[require('config.neogit')]],
+  },
+  {
+    'akinsho/git-conflict.nvim',
+    version = '*',
+    event = 'BufReadPost',
+    config = function()
+      require('git-conflict').setup()
+    end,
+  },
 
-  use 'vim-airline/vim-airline'
-  use 'vim-airline/vim-airline-themes'
-  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use { 'pedrohdz/vim-yaml-folds' }
-  use { 'fatih/vim-go' }
-  use {
-   'leoluz/nvim-dap-go',
-   requires = {
+  -- Statusline
+  { 'vim-airline/vim-airline' },
+  { 'vim-airline/vim-airline-themes' },
+
+  -- Diffview
+  {
+    'sindrets/diffview.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+
+  -- YAML
+  { 'pedrohdz/vim-yaml-folds' },
+
+  -- Go
+  { 'fatih/vim-go' },
+  {
+    'leoluz/nvim-dap-go',
+    dependencies = {
       'rcarriga/nvim-dap-ui',
       'mfussenegger/nvim-dap',
-   },
-   config = function()
-     require('dap-go').setup({
-      dap_configurations = {
-        {
-          type = "go",
-          name = "Attach Remote",
-          mode = "remote",
-          request = "attach",
+    },
+    config = function()
+      require('dap-go').setup({
+        dap_configurations = {
+          {
+            type = 'go',
+            name = 'Attach Remote',
+            mode = 'remote',
+            request = 'attach',
+          },
         },
-      },
-      delve = {
-        build_flags = "-tags=integration",
-      },
-    })
-   end,
-  }
-  use {
+        delve = {
+          build_flags = '-tags=integration',
+        },
+      })
+    end,
+  },
+
+  -- LSP
+  {
     'neovim/nvim-lspconfig',
-    config = function ()
-      require('lspconfig').rust_analyzer.setup {
-        settings = {
-          ['rust-analyzer'] = {
-            check = {
-              command = "clippy";
-            },
-            diagnostics = {
-              enable = true;
-            }
-          }
-        }
-      }
+    config = function()
+      -- LSP configuration can be added here
+    end,
+  },
 
-      require('lspconfig').gopls.setup{}
-    end
-  }
-
-  use {
+  -- Completion
+  {
     'hrsh7th/nvim-cmp',
-    requires = {
+    dependencies = {
       'neovim/nvim-lspconfig',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
@@ -226,41 +226,44 @@ return require('packer').startup(function(use)
       require('cmp').setup({
         snippet = {
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            vim.fn['vsnip#anonymous'](args.body)
           end,
         },
-        sources =  {
+        sources = {
           { name = 'nvim_lsp' },
           { name = 'vsnip' },
           { name = 'path' },
           { name = 'buffer' },
         },
       })
-    end
-  }
+    end,
+  },
 
-  use 'preservim/tagbar'
-  use {
-    'simrat39/rust-tools.nvim',
-    config = function()
-      require("rust-tools").setup({
+  -- Tags
+  { 'preservim/tagbar' },
+
+  -- Rust
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^5',
+    lazy = false,
+    ft = { 'rust' },
+    init = function()
+      vim.g.rustaceanvim = {
         tools = {
-          runnables = {
-            use_telescope = true,
-          },
           inlay_hints = {
             auto = true,
             show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-          }
-        }
-      })
-    end
-  }
+          },
+        },
+      }
+    end,
+  },
 
-  use {
+  -- Theme
+  {
     'projekt0n/github-nvim-theme',
+    priority = 1000,
     config = function()
       require('github-theme').setup({
         options = {
@@ -272,42 +275,37 @@ return require('packer').startup(function(use)
           },
         },
       })
-
       vim.cmd('colorscheme github_dark')
-    end
-  }
+    end,
+  },
 
-  use {
+  -- Bufferline
+  {
     'akinsho/bufferline.nvim',
-    tag = "*",
-    requires = 'nvim-tree/nvim-web-devicons',
+    version = '*',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       vim.opt.termguicolors = true
+      require('bufferline').setup {}
+    end,
+  },
 
-      require('bufferline').setup{}
-    end
-  }
+  -- Which-key
+  {
+    'folke/which-key.nvim',
+    dependencies = { 'echasnovski/mini.icons' },
+  },
 
-  use { 
-    'folke/which-key.nvim', 
-    requires = {
-      'echasnovski/mini.icons',
-    },
-  }
-
-  use {
+  -- GitHub (Octo)
+  {
     'pwntester/octo.nvim',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
       'nvim-tree/nvim-web-devicons',
     },
-    config = function ()
-      require"octo".setup()
-    end
-  }
-
-  if packer_bootstrap then
-    require('packer').sync()
-  end
-end)
+    config = function()
+      require('octo').setup()
+    end,
+  },
+}
