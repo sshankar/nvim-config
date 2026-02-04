@@ -10,24 +10,6 @@ g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_ruby_provider = 0
 
--- Disable some built-in plugins we don't want
-local disabled_built_ins = {
-  'gzip',
-  'man',
-  'matchit',
-  'matchparen',
-  'shada_plugin',
-  'tarPlugin',
-  'tar',
-  'zipPlugin',
-  'zip',
-  'netrwPlugin',
-}
-
-for i = 1, #disabled_built_ins do
-  g['loaded_' .. disabled_built_ins[i]] = 1
-end
-
 -- Settings
 local opt = vim.opt
 opt.textwidth = 100
@@ -76,7 +58,7 @@ opt.clipboard = 'unnamed'
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
     'git',
     'clone',
@@ -89,7 +71,25 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Load plugins
-require('lazy').setup('plugins')
+require('lazy').setup('plugins', {
+  defaults = { lazy = true },
+  install = { colorscheme = { 'github_dark' } },
+  checker = { enabled = false },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        'gzip',
+        'matchit',
+        'matchparen',
+        'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+      },
+    },
+  },
+})
 
 -- Keymaps
 require 'config.keymaps'

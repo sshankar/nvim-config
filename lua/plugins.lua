@@ -1,10 +1,14 @@
 return {
-  -- Notifications
-  { 'rcarriga/nvim-notify' },
+  -- Notifications (lazy, loaded by noice)
+  {
+    'rcarriga/nvim-notify',
+    lazy = true,
+  },
 
   -- Fuzzy finder
   {
     'ibhagwan/fzf-lua',
+    cmd = 'FzfLua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 
@@ -16,63 +20,80 @@ return {
       'MunifTanjim/nui.nvim',
       'rcarriga/nvim-notify',
     },
-    config = function()
-      require('noice').setup()
-    end,
+    opts = {},
   },
 
   -- Motion
-  { 'chaoren/vim-wordmotion' },
   {
-    'https://codeberg.org/andyg/leap.nvim',
+    'chaoren/vim-wordmotion',
+    event = { 'BufReadPost', 'BufNewFile' },
+  },
+  {
+    'ggandor/leap.nvim',
     dependencies = { 'tpope/vim-repeat' },
+    keys = {
+      { 's', mode = { 'n', 'x', 'o' }, desc = 'Leap forward' },
+      { 'S', mode = { 'n', 'x', 'o' }, desc = 'Leap backward' },
+      { 'gs', mode = { 'n', 'x', 'o' }, desc = 'Leap from windows' },
+    },
     config = function()
       require('leap').add_default_mappings()
     end,
   },
   {
     'ggandor/flit.nvim',
-    config = function()
-      require('flit').setup { labeled_modes = 'nv' }
-    end,
+    dependencies = { 'ggandor/leap.nvim' },
+    keys = {
+      { 'f', mode = { 'n', 'x', 'o' } },
+      { 'F', mode = { 'n', 'x', 'o' } },
+      { 't', mode = { 'n', 'x', 'o' } },
+      { 'T', mode = { 'n', 'x', 'o' } },
+    },
+    opts = { labeled_modes = 'nv' },
   },
 
   -- Quickfix
   { 'Olical/vim-enmasse', cmd = 'EnMasse' },
-  { 'kevinhwang91/nvim-bqf' },
   {
-    'https://gitlab.com/yorickpeterse/nvim-pqf',
-    config = function()
-      require('pqf').setup()
-    end,
+    'kevinhwang91/nvim-bqf',
+    ft = 'qf',
+  },
+  {
+    'yorickpeterse/nvim-pqf',
+    ft = 'qf',
+    opts = {},
   },
 
   -- Commenting
   {
     'numToStr/Comment.nvim',
-    event = 'User ActuallyEditing',
-    config = function()
-      require('Comment').setup {}
-    end,
+    keys = {
+      { 'gc', mode = { 'n', 'v' }, desc = 'Comment toggle linewise' },
+      { 'gb', mode = { 'n', 'v' }, desc = 'Comment toggle blockwise' },
+    },
+    opts = {},
   },
 
   -- Wrapping/delimiters
   {
     'andymass/vim-matchup',
+    event = { 'BufReadPost', 'BufNewFile' },
     init = function()
       vim.g.matchup_matchparen_offscreen = { method = 'popup' }
     end,
   },
 
   -- Search
-  { 'romainl/vim-cool' },
+  {
+    'romainl/vim-cool',
+    event = 'CmdlineEnter',
+  },
 
   -- Telescope
   {
     'nvim-telescope/telescope.nvim',
     cmd = 'Telescope',
     dependencies = {
-      'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-ui-select.nvim',
       'crispgm/telescope-heading.nvim',
@@ -94,127 +115,142 @@ return {
       { '<c-d>', function() require('telescope.builtin').grep_string() end, desc = 'Grep string' },
       { '<c-g>', function() require('telescope.builtin').live_grep() end, desc = 'Live grep' },
     },
-    config = [[require('config.telescope')]],
+    config = function()
+      require('config.telescope')
+    end,
   },
 
-  -- Highlights
+  -- Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
-    config = [[require 'config.treesitter']],
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-refactor',
+    },
+    config = function()
+      require('config.treesitter')
+    end,
   },
 
-  -- Indentation tracking
+  -- Indentation guides
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     event = { 'BufReadPost', 'BufNewFile' },
+    opts = {},
   },
 
-  -- Colorscheme
-  { 'arcticicestudio/nord-vim' },
-
-  -- Icons
-  { 'kyazdani42/nvim-web-devicons' },
+  -- Icons (shared dependency)
+  { 'nvim-tree/nvim-web-devicons', lazy = true },
 
   -- Trouble (diagnostics)
   {
     'folke/trouble.nvim',
     cmd = 'Trouble',
-    config = function()
-      require('trouble').setup {}
-    end,
+    opts = {},
   },
 
   -- File explorer
   {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
+    cmd = 'Neotree',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
       'MunifTanjim/nui.nvim',
     },
-    config = [[require('config.neotree')]],
+    config = function()
+      require('config.neotree')
+    end,
   },
 
   -- Git
   {
     'lewis6991/gitsigns.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    event = 'User ActuallyEditing',
-    config = [[require('config.gitsigns')]],
+    event = { 'BufReadPost', 'BufNewFile' },
+    config = function()
+      require('config.gitsigns')
+    end,
   },
   {
     'NeogitOrg/neogit',
+    cmd = 'Neogit',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'sindrets/diffview.nvim',
       'nvim-telescope/telescope.nvim',
     },
-    config = [[require('config.neogit')]],
+    config = function()
+      require('config.neogit')
+    end,
   },
   {
     'akinsho/git-conflict.nvim',
     version = '*',
     event = 'BufReadPost',
-    config = function()
-      require('git-conflict').setup()
-    end,
+    opts = {},
   },
 
   -- Statusline
-  { 'vim-airline/vim-airline' },
-  { 'vim-airline/vim-airline-themes' },
+  {
+    'vim-airline/vim-airline',
+    event = 'VeryLazy',
+    dependencies = { 'vim-airline/vim-airline-themes' },
+  },
 
   -- Diffview
   {
     'sindrets/diffview.nvim',
+    cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
   -- YAML
-  { 'pedrohdz/vim-yaml-folds' },
+  {
+    'pedrohdz/vim-yaml-folds',
+    ft = { 'yaml', 'yml' },
+  },
 
   -- Go
-  { 'fatih/vim-go' },
+  {
+    'fatih/vim-go',
+    ft = 'go',
+  },
   {
     'leoluz/nvim-dap-go',
+    ft = 'go',
     dependencies = {
-      'rcarriga/nvim-dap-ui',
       'mfussenegger/nvim-dap',
+      { 'rcarriga/nvim-dap-ui', dependencies = { 'nvim-neotest/nvim-nio' } },
     },
-    config = function()
-      require('dap-go').setup({
-        dap_configurations = {
-          {
-            type = 'go',
-            name = 'Attach Remote',
-            mode = 'remote',
-            request = 'attach',
-          },
+    opts = {
+      dap_configurations = {
+        {
+          type = 'go',
+          name = 'Attach Remote',
+          mode = 'remote',
+          request = 'attach',
         },
-        delve = {
-          build_flags = '-tags=integration',
-        },
-      })
-    end,
+      },
+      delve = {
+        build_flags = '-tags=integration',
+      },
+    },
   },
 
   -- LSP
   {
     'neovim/nvim-lspconfig',
-    config = function()
-      -- LSP configuration can be added here
-    end,
+    event = { 'BufReadPost', 'BufNewFile' },
   },
 
   -- Completion
   {
     'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
     dependencies = {
-      'neovim/nvim-lspconfig',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
@@ -240,14 +276,16 @@ return {
   },
 
   -- Tags
-  { 'preservim/tagbar' },
+  {
+    'preservim/tagbar',
+    cmd = 'TagbarToggle',
+  },
 
   -- Rust
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
-    lazy = false,
-    ft = { 'rust' },
+    ft = 'rust',
     init = function()
       vim.g.rustaceanvim = {
         tools = {
@@ -260,22 +298,21 @@ return {
     end,
   },
 
-  -- Theme
+  -- Theme (load first with high priority)
   {
     'projekt0n/github-nvim-theme',
+    lazy = false,
     priority = 1000,
     config = function()
       require('github-theme').setup({
         options = {
           darken = {
             float = true,
-            sidebars = {
-              enable = true,
-            },
+            sidebars = { enable = true },
           },
         },
       })
-      vim.cmd('colorscheme github_dark')
+      vim.cmd.colorscheme('github_dark')
     end,
   },
 
@@ -283,29 +320,28 @@ return {
   {
     'akinsho/bufferline.nvim',
     version = '*',
+    event = 'VeryLazy',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      vim.opt.termguicolors = true
-      require('bufferline').setup {}
-    end,
+    opts = {},
   },
 
   -- Which-key
   {
     'folke/which-key.nvim',
+    event = 'VeryLazy',
     dependencies = { 'echasnovski/mini.icons' },
+    opts = {},
   },
 
   -- GitHub (Octo)
   {
     'pwntester/octo.nvim',
+    cmd = 'Octo',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
       'nvim-tree/nvim-web-devicons',
     },
-    config = function()
-      require('octo').setup()
-    end,
+    opts = {},
   },
 }
