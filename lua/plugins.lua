@@ -125,9 +125,6 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-refactor',
-    },
     config = function()
       require('config.treesitter')
     end,

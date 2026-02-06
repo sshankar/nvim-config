@@ -1,4 +1,4 @@
-require('nvim-treesitter.configs').setup {
+require('nvim-treesitter').setup {
   auto_install = true,
   indent = { enable = false },
   incremental_selection = {
