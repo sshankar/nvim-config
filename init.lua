@@ -40,7 +40,7 @@ opt.updatetime = 100
 opt.conceallevel = 2
 opt.concealcursor = 'nc'
 opt.previewheight = 5
-opt.undofile = true
+opt.undofile = false
 opt.synmaxcol = 500
 opt.display = 'msgsep'
 opt.cursorline = true
@@ -54,7 +54,8 @@ opt.timeoutlen = 200
 opt.fillchars = [[vert:│,horiz:─,eob: ]]
 opt.termguicolors = true
 -- opt.background = 'light'
-opt.clipboard = 'unnamed'
+opt.clipboard = 'unnamed,unnamedplus'
+opt.swapfile = false
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
