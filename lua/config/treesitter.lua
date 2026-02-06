@@ -1,5 +1,6 @@
 require('nvim-treesitter').setup {
   auto_install = true,
+  ensure_installed = { 'bash', 'regex' },
   indent = { enable = false },
   incremental_selection = {
     enable = true,
