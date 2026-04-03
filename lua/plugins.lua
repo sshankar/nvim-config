@@ -37,7 +37,7 @@ return {
     event = { 'BufReadPost', 'BufNewFile' },
   },
   {
-    'ggandor/leap.nvim',
+    url = "https://codeberg.org/andyg/leap.nvim",
     dependencies = { 'tpope/vim-repeat' },
     keys = {
       { 's', mode = { 'n', 'x', 'o' }, desc = 'Leap forward' },
@@ -160,6 +160,7 @@ return {
   {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
+    event = { 'BufReadPre', 'BufNewFile' },
     cmd = 'Neotree',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -317,7 +318,7 @@ return {
           },
         },
       })
-      vim.cmd.colorscheme('github_dark')
+      vim.cmd.colorscheme('github_dark_default')
     end,
   },
 
@@ -348,5 +349,15 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
     opts = {},
+  },
+
+  -- dashboard
+  {
+    'goolord/alpha-nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('config.alpha')
+    end,
   },
 }
