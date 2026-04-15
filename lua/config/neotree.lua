@@ -31,10 +31,28 @@ local function is_real_file_buffer(bufnr)
   return stat ~= nil and stat.type == "file"
 end
 
+local function is_git_commit_message_buffer(bufnr)
+  local file_path = vim.api.nvim_buf_get_name(bufnr)
+  local file_name = vim.fs.basename(file_path)
+
+  return vim.bo[bufnr].filetype == "gitcommit"
+    or file_name == "COMMIT_EDITMSG"
+    or file_name == "MERGE_MSG"
+    or file_name == "TAG_EDITMSG"
+end
+
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
   group = neo_tree_auto_open_group,
   callback = function(args)
     if vim.bo[args.buf].filetype == "neo-tree" then
+      return
+    end
+
+    if vim.wo[vim.api.nvim_get_current_win()].diff then
+      return
+    end
+
+    if is_git_commit_message_buffer(args.buf) then
       return
     end
 
