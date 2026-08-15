@@ -50,7 +50,7 @@ return {
   },
   {
     'ggandor/flit.nvim',
-    dependencies = { 'ggandor/leap.nvim' },
+    dependencies = { { url = 'https://codeberg.org/andyg/leap.nvim' } },
     keys = {
       { 'f', mode = { 'n', 'x', 'o' } },
       { 'F', mode = { 'n', 'x', 'o' } },
@@ -122,6 +122,8 @@ return {
       { '<c-s>', function() require('telescope.builtin').git_files() end, desc = 'Git files' },
       { '<c-d>', function() require('telescope.builtin').grep_string() end, desc = 'Grep string' },
       { '<c-g>', function() require('telescope.builtin').live_grep() end, desc = 'Live grep' },
+      { 'gr', function() require('telescope.builtin').lsp_references() end, desc = 'LSP references' },
+      { 'gI', function() require('telescope.builtin').lsp_implementations() end, desc = 'LSP implementations' },
     },
     config = function()
       require('config.telescope')
@@ -162,6 +164,9 @@ return {
     branch = 'v2.x',
     event = { 'BufReadPre', 'BufNewFile' },
     cmd = 'Neotree',
+    keys = {
+      { 'tt', ':Neotree toggle<CR>', desc = 'Toggle file tree' },
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
