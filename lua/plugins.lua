@@ -251,10 +251,45 @@ return {
     },
   },
 
-  -- LSP
+  -- LSP (native vim.lsp.config, Neovim 0.11+ — no nvim-lspconfig needed)
   {
-    'neovim/nvim-lspconfig',
-    event = { 'BufReadPost', 'BufNewFile' },
+    'hrsh7th/cmp-nvim-lsp',
+    lazy = false,
+    config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      -- Shared capabilities for all LSP servers
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
+
+      -- Lua
+      vim.lsp.config('lua_ls', {
+        filetypes = { 'lua' },
+        settings = {
+          Lua = {
+            runtime = { version = 'LuaJIT' },
+            workspace = { checkThirdParty = false },
+          },
+        },
+      })
+      vim.lsp.enable('lua_ls')
+
+      -- Go (install: go install golang.org/x/tools/gopls@latest)
+      vim.lsp.config('gopls', {
+         filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+      })
+      vim.lsp.enable('gopls')
+
+      -- Python (install: pip install pyright)
+      vim.lsp.config('pyright', {
+        cmd = { 'pyright-langserver', '--stdio' },
+        filetypes = { 'python' },
+      })
+      vim.lsp.enable('pyright')
+
+      -- Rust is handled by rustaceanvim (see below) — don't double-configure
+    end,
   },
 
   -- Completion
@@ -270,7 +305,9 @@ return {
       'hrsh7th/vim-vsnip',
     },
     config = function()
-      require('cmp').setup({
+      local cmp = require('cmp')
+
+      cmp.setup({
         snippet = {
           expand = function(args)
             vim.fn['vsnip#anonymous'](args.body)
@@ -281,6 +318,10 @@ return {
           { name = 'vsnip' },
           { name = 'path' },
           { name = 'buffer' },
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
         },
       })
     end,
