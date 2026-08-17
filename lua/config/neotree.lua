@@ -27,7 +27,7 @@ local function is_real_file_buffer(bufnr)
     return false
   end
 
-  local stat = (vim.uv or vim.loop).fs_stat(file_path)
+  local stat = vim.uv.fs_stat(file_path)
   return stat ~= nil and stat.type == "file"
 end
 

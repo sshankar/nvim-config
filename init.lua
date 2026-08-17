@@ -42,7 +42,7 @@ opt.concealcursor = 'nc'
 opt.previewheight = 5
 opt.undofile = false
 opt.synmaxcol = 500
-opt.display = 'msgsep'
+
 opt.cursorline = true
 opt.modeline = false
 opt.mouse = 'nivh'
@@ -59,7 +59,7 @@ opt.swapfile = false
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     'git',
     'clone',

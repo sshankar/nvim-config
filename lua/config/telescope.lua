@@ -8,7 +8,7 @@ telescope.setup {
     theme = require('telescope.themes').get_dropdown { layout_config = { prompt_position = 'top' } },
   },
   extensions = {
-    frecency = { workspaces = { exo = '/home/wil/projects/research/exoplanet' } },
+    frecency = {},
     fzf = {
       fuzzy = true,
       override_generic_sorter = true,
@@ -20,7 +20,7 @@ telescope.setup {
     },
     heading = { treesitter = true },
     file_browser = {
-      hijack_netwrw = true,
+      hijack_netrw = true,
       hidden = true,
       mappings = {
         i = {

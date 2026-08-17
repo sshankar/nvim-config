@@ -5,13 +5,6 @@ return {
     lazy = true,
   },
 
-  -- Fuzzy finder
-  {
-    'ibhagwan/fzf-lua',
-    cmd = 'FzfLua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-  },
-
   -- Noice (UI for messages, cmdline, popupmenu)
   {
     'folke/noice.nvim',
@@ -62,10 +55,6 @@ return {
 
   -- Quickfix
   { 'Olical/vim-enmasse', cmd = 'EnMasse' },
-  {
-    'kevinhwang91/nvim-bqf',
-    ft = 'qf',
-  },
   {
     'yorickpeterse/nvim-pqf',
     ft = 'qf',
@@ -161,7 +150,6 @@ return {
   -- File explorer
   {
     'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
     event = { 'BufReadPre', 'BufNewFile' },
     cmd = 'Neotree',
     keys = {
@@ -206,9 +194,10 @@ return {
 
   -- Statusline
   {
-    'vim-airline/vim-airline',
+    'nvim-lualine/lualine.nvim',
     event = 'VeryLazy',
-    dependencies = { 'vim-airline/vim-airline-themes' },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
   },
 
   -- Diffview
@@ -224,11 +213,7 @@ return {
     ft = { 'yaml', 'yml' },
   },
 
-  -- Go
-  {
-    'fatih/vim-go',
-    ft = 'go',
-  },
+  -- Go debugging
   {
     'leoluz/nvim-dap-go',
     ft = 'go',
@@ -277,7 +262,7 @@ return {
 
       -- Go (install: go install golang.org/x/tools/gopls@latest)
       vim.lsp.config('gopls', {
-         filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
       })
       vim.lsp.enable('gopls')
 
@@ -367,7 +352,12 @@ return {
       vim.cmd.colorscheme('github_dark_default')
     end,
   },
-
+  {
+    "craftzdog/solarized-osaka.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   -- Bufferline
   {
     'akinsho/bufferline.nvim',
