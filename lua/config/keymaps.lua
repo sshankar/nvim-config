@@ -89,3 +89,27 @@ end
 vim.keymap.set('n', 'gm', goto_function_name, { desc = 'Jump to function name' })
 vim.keymap.set('n', 'gA', goto_arguments, { desc = 'Jump to function arguments' })
 vim.keymap.set('n', 'gR', goto_return_type, { desc = 'Jump to return type' })
+
+-- ── LSP ──────────────────────────────────────────────────────────
+
+-- Navigation
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, { desc = 'Go to type definition' })
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to declaration' })
+vim.keymap.set('n', 'go', vim.lsp.buf.document_symbol, { desc = 'Document symbols' })
+vim.keymap.set('n', 'gW', vim.lsp.buf.workspace_symbol, { desc = 'Workspace symbols' })
+
+-- Info
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover' })
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Diagnostic at cursor' })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+
+-- Refactor
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'Rename symbol' })
+vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code action' })
+vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format({ async = true }) end, { desc = 'Format buffer' })
+
+-- Call hierarchy
+vim.keymap.set('n', 'gci', vim.lsp.buf.incoming_calls, { desc = 'Incoming calls' })
+vim.keymap.set('n', 'gco', vim.lsp.buf.outgoing_calls, { desc = 'Outgoing calls' })
