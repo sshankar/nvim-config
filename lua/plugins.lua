@@ -256,6 +256,7 @@ return {
 
       -- Lua
       vim.lsp.config('lua_ls', {
+        cmd = { 'lua-language-server' },
         filetypes = { 'lua' },
         settings = {
           Lua = {
@@ -268,7 +269,17 @@ return {
 
       -- Go (install: go install golang.org/x/tools/gopls@latest)
       vim.lsp.config('gopls', {
+        cmd = { 'gopls' },
         filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
       })
       vim.lsp.enable('gopls')
 
@@ -278,6 +289,14 @@ return {
         filetypes = { 'python' },
       })
       vim.lsp.enable('pyright')
+
+      -- JavaScript/TypeScript (install: npm install -g typescript-language-server typescript)
+      vim.lsp.config('ts_ls', {
+        cmd = { 'typescript-language-server', '--stdio' },
+        filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+      })
+      vim.lsp.enable('ts_ls')
 
       -- Rust is handled by rustaceanvim (see below) — don't double-configure
     end,
