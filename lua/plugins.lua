@@ -119,6 +119,8 @@ return {
       { '<c-g>', function() require('telescope.builtin').live_grep() end, desc = 'Live grep' },
       { 'gr', function() require('telescope.builtin').lsp_references() end, desc = 'LSP references' },
       { 'gI', function() require('telescope.builtin').lsp_implementations() end, desc = 'LSP implementations' },
+      { 'ds', function() require('telescope.builtin').lsp_document_symbols() end, desc = 'Document symbols' },
+      { 'ws', function() require('telescope.builtin').lsp_workspace_symbols() end, desc = 'Workspace symbols' },
     },
     config = function()
       require('config.telescope')
@@ -294,7 +296,7 @@ return {
       vim.lsp.config('ts_ls', {
         cmd = { 'typescript-language-server', '--stdio' },
         filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+        root_markers = { 'pnpm-workspace.yaml', 'pnpm-lock.yaml', '.git' },
       })
       vim.lsp.enable('ts_ls')
 
