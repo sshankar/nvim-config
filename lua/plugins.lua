@@ -300,6 +300,12 @@ return {
       })
       vim.lsp.enable('ts_ls')
 
+      -- C / C++ / ObjC / CUDA (install: clangd)
+      vim.lsp.config('clangd', {
+        filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+      })
+      vim.lsp.enable('clangd')
+
       -- Rust is handled by rustaceanvim (see below) — don't double-configure
     end,
   },
