@@ -302,6 +302,7 @@ return {
 
       -- C / C++ / ObjC / CUDA (install: clangd)
       vim.lsp.config('clangd', {
+        cmd = { 'clangd' },
         filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
       })
       vim.lsp.enable('clangd')
